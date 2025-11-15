@@ -2,6 +2,8 @@
 #define COMMON
 
 #include <iostream>
+#include <fstream>
+#include <regex>
 #include <map>
 #include <string>
 
