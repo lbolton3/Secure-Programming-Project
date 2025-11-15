@@ -7,3 +7,11 @@
 
 ### Setup
 -
+
+
+### Documentation
+- The format for the log file is the following:
+```
+[TIMESTAMP] "EMPLOYEENAME" logged that guest "GUESTNAME" departed/arrived from room "ROOMID"
+```
+- Where: uppercase words are the parameters and every entry ends in a `\n` (newline)

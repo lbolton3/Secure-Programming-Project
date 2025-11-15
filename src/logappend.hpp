@@ -10,6 +10,6 @@
 /*
 */
 int logWrite(const std::string logFileName, const std::string employeeName, const std::string guestName,
-     unsigned int roomId, bool isArrival);
+     unsigned int roomId, bool isArrival, unsigned int timestamp = 1);
 
 #endif

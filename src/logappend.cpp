@@ -1,13 +1,13 @@
 #include "logappend.hpp"
 
-int logWrite(const std::string logFileName, const std::string employeeName, const std::string guestName, unsigned int roomId, bool isArrival){
+int logWrite(const std::string logFileName, const std::string employeeName, const std::string guestName, unsigned int roomId, bool isArrival,
+    unsigned int timestamp){
     /* VALIDATION */
 
     // regex matches any: '..' or '\' or '/' 
     // prevent file directory traversal
-    std::regex invalidFileNameParts(R"(\.\.|\\|\/)"); 
+    std::regex invalidFileNameParts(R"(\.\.|\\|^\/)"); 
     if(std::regex_search(logFileName, invalidFileNameParts)){
-        std::cout << "invalid" << std::endl;
         return 255; // error code
     }
 
@@ -15,23 +15,37 @@ int logWrite(const std::string logFileName, const std::string employeeName, cons
     // must be A-Z and a-z only, no spaces
     std::regex invalidName(R"(^[A-Za-z]+$)"); 
     if(!std::regex_match(employeeName, invalidName)){
-        std::cout << "invalid" << std::endl;
         return 255;
     }
     else if(!std::regex_match(guestName, invalidName)){
-        std::cout << "invalid" << std::endl;
+        return 255;
+    }
+
+    // validate timestamp, according to spec must be can't be 0
+    if(timestamp == 0){
         return 255;
     }
 
     std::ofstream f(logFileName, std::ios::app);
 
+    f << "[" << timestamp << "] \"" << employeeName << "\" logged that guest \"" << guestName << "\" " << 
+        (isArrival ? "arrived " : "departed ") << "from room \"" << roomId << "\"" << "\n";
+
+    f.close();
+
     return 0; 
 }
 
-int main(){
-    std::cout << "this is logappend" << std::endl;
+/*
+COMMENT MAIN OUT TO RUN TESTS (main will eventually go somehwere else, this is just for debugging)
+*/
 
-    logWrite("test.txt", "aFFFF", "bdqwCdqw", 1, false);
+// int main(){
+//     std::cout << "this is logappend" << std::endl;
 
-    return 0;
-}
+//     int i = logWrite("test.txt", "MahaAllouzi", "MikhailNesterenko", 1, false, 123);
+
+//     std::cout << i << std::endl;
+
+//     return 0;
+// }
