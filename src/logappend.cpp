@@ -1,6 +1,6 @@
 #include "logappend.hpp"
 
-int logWrite(const std::string logFileName, const std::string employeeName, const std::string guestName, unsigned int roomId, bool isArrival,
+int logWrite(const std::string logFileName, const std::string targetName, bool isEmployee, unsigned int roomId, bool isArrival,
     unsigned int timestamp){
     /* VALIDATION */
 
@@ -14,10 +14,7 @@ int logWrite(const std::string logFileName, const std::string employeeName, cons
     // guest and employee names
     // must be A-Z and a-z only, no spaces
     std::regex invalidName(R"(^[A-Za-z]+$)"); 
-    if(!std::regex_match(employeeName, invalidName)){
-        return 255;
-    }
-    else if(!std::regex_match(guestName, invalidName)){
+    if(!std::regex_match(targetName, invalidName)){
         return 255;
     }
 
@@ -28,8 +25,8 @@ int logWrite(const std::string logFileName, const std::string employeeName, cons
 
     std::ofstream f(logFileName, std::ios::app);
 
-    f << "[" << timestamp << "] \"" << employeeName << "\" logged that guest \"" << guestName << "\" " << 
-        (isArrival ? "arrived " : "departed ") << "from room \"" << roomId << "\"" << "\n";
+    f << "[" << timestamp << "] logged that "<< ( isEmployee ? "employee " : "guest ") << "\"" << targetName << "\" " << 
+        (isArrival ? "arrived to " : "departed from ") << "room \"" << roomId << "\"" << "\n";
 
     f.close();
 
