@@ -29,3 +29,21 @@ std::map<std::string, std::string> parseArguments(int argc, char* argv[]) {
 
     return arguments;
 }
+
+// see hpp
+std::vector<std::string> splitString(const std::string& s, char delimiter) {
+    std::vector<std::string> result;
+    std::stringstream ss(s);
+    std::string piece;
+
+    while (std::getline(ss, piece, delimiter)) {
+        result.push_back(piece);
+    }
+    return result;
+}
+
+void printArgs(std::map<std::string, std::string> args){
+    for(auto i = args.begin(); i != args.end(); i++){
+        std::cout << (*i).first << " " << (*i).second << std::endl;
+    }
+}
