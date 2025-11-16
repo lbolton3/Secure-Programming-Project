@@ -1,7 +1,7 @@
 #ifndef LOGREAD
 #define LOGREAD
 
-#include "common.hpp"
+#include "common.cpp"
 
 // declarations 
 

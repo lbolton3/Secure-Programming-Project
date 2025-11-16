@@ -13,6 +13,15 @@ std::map<std::string, std::string> parseArguments(int argc, char* argv[]) {
                 arguments["log"] = value;
             }
         }
+        // Check for 2nd to last argument being a flag without value
+        else if (i == argc-2) {
+            if (arg[0] == '-') {
+                std::string key = arg;
+                std::string value = "true"; // Flag without value
+                arguments[key] = value;
+                continue;
+            }
+        }
 
         // Process flags and their values
         if (arg[0] == '-') {
