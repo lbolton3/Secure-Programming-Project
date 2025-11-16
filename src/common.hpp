@@ -6,6 +6,7 @@
 #include <regex>
 #include <map>
 #include <string>
+#include <set>
 
 // INPUT: Command-line arguments, consiting of flags (starting with '-') and their values, and the log file
 // OUTPUT: A map of flags to their values, and the log file
