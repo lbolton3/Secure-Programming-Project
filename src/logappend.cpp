@@ -25,8 +25,8 @@ int logWrite(const std::string logFileName, const std::string targetName, bool i
 
     std::ofstream f(logFileName, std::ios::app);
 
-    f << "[" << timestamp << "] logged that "<< ( isEmployee ? "employee " : "guest ") << "\"" << targetName << "\" " << 
-        (isArrival ? "arrived to " : "departed from ") << "room \"" << roomId << "\"" << "\n";
+    f << "[" << timestamp << "] room \"" << roomId << "\": " << ( isEmployee ? "employee " : "guest ") << "\"" << targetName << "\" " << 
+        (isArrival ? "arrived" : "departed") << "\n";
 
     f.close();
 

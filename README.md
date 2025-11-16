@@ -12,6 +12,6 @@
 ### Documentation
 - The format for the log file is the following:
 ```
-[TIMESTAMP] logged that employee/guest "NAME" departed/arrived from room "ROOMID"
+[TIMESTAMP] room "ROOMID": (guest | employee) "NAME" (departed | arrived)
 ```
 - Where: uppercase words are the parameters and every entry ends in a `\n` (newline)
