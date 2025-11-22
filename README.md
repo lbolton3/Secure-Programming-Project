@@ -19,6 +19,7 @@
 ### MSYS2 
 - Install MSYS2 (https://www.msys2.org/)
 - Open MSYS2 MINGW shell (it's a program called "MSYS2 MINGW64"), HAS TO BE THIS SHELL NOT THE DEFAULT MSYS2 ONE
+- run `pacman -S --needed mingw-w64-x86_64-toolchain`
 - run `pacman -S mingw-w64-x86_64-openssl` to install openssl dependency
 - Now we need to add the MSYS2 mingw shell to vscode
 - Open Vscode, press ctrl+shift+p go to "Preferences: open user settings (JSON)"
