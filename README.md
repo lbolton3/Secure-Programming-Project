@@ -34,7 +34,7 @@
     },
 ```
 - Now you can open the shell inside vscode by doing ctrl+shift+p and "create new terminal (with profile)" and selecting MSYS2
-- Then go to this project's path by doing `cd PATH_TO_ROOT_OF_PROJECT` 
+- Then go to this project's path by doing `cd PATH_TO_ROOT_OF_PROJECT` inside the msys2 shell from vscode. And now you can compile.
 
 - Also, VSCode will show errors in the `#include <>` for openssl stuff, because you need to add the headers to the include path
     - Do this by: ctrl+shift+p, then int "c/c++: edit configurations"
