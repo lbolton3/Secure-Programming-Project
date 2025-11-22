@@ -66,3 +66,20 @@ std::string sha256(const std::string s) {
 
     return oss.str();
 }
+
+bool validateToken(const std::string inputToken) {
+    // Open token file
+    std::ifstream file("token.txt");
+    if (!file.is_open()) {
+        std::cerr << "Error retrieving authentication token" << std::endl;
+        return false;
+    }
+
+    // Read the token
+    std::string authToken;
+    file >> authToken;
+    file.close();
+
+    // Compare tokens
+    return (authToken == sha256(inputToken));
+}
