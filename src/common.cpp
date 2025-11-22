@@ -5,11 +5,21 @@ std::map<std::string, std::string> parseArguments(int argc, char* argv[]) {
     
     for (int i = 1; i < argc; ++i) {
         std::string arg = argv[i];
-
+        
         // Check for the last argument (log file)
-        if (i == argc - 1) {
+        if (i == argc-1) {
             if (arg[0] != '-') {
-                arguments["log"] = arg;
+                std::string value = arg;
+                arguments["log"] = value;
+            }
+        }
+        // Check for 2nd to last argument being a flag without value
+        else if (i == argc-2) {
+            if (arg[0] == '-') {
+                std::string key = arg;
+                std::string value = "true"; // Flag without value
+                arguments[key] = value;
+                continue;
             }
         }
 
@@ -17,13 +27,11 @@ std::map<std::string, std::string> parseArguments(int argc, char* argv[]) {
         if (arg[0] == '-') {
             std::string key = arg;
             std::string value;
-
             if ((i + 1) < argc && argv[i + 1][0] != '-') {
                 value = argv[++i];
             } else {
-                value = "true";  // Flag without value
+                value = "true"; // Flag without value
             }
-
             arguments[key] = value;
         }
     }
