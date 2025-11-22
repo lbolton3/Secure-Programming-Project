@@ -1,5 +1,5 @@
 #include "common.hpp"
-
+#include <openssl/evp.h>
 std::map<std::string, std::string> parseArguments(int argc, char* argv[]) {
     std::map<std::string, std::string> arguments;
     
@@ -65,4 +65,17 @@ std::string sha256(const std::string s) {
     }
 
     return oss.str();
+}
+
+
+void deriveKey(const std::string& token, unsigned char* key, const unsigned char* salt)
+{
+    PKCS5_PBKDF2_HMAC(
+        token.c_str(), token.length(),
+        salt, 16,
+        10000,
+        EVP_sha256(),
+        32,
+        key
+    );
 }

@@ -22,5 +22,8 @@ void printArgs(std::map<std::string, std::string> args);
 
 // CRYPTO FUNCTIONS 
 std::string sha256(const std::string s); 
+void deriveKey(const std::string& token, unsigned char* key, const unsigned char* salt);
+std::string encryptData(const std::string& plaintext, const unsigned char* key);
+std::string decryptData(const std::string& encrypted, const unsigned char* key);
 #endif
 
