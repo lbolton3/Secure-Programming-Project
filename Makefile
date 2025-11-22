@@ -52,6 +52,9 @@ logappend: $(SRC_DIR)/logappend.cpp $(COMMON_SRC)
 logread: $(SRC_DIR)/logread.cpp $(COMMON_SRC)
 	$(CXX) $(CXXFLAGS) $(INCLUDES) $(SRC_DIR)/logread.cpp $(COMMON_SRC) -o logread.exe $(LDFLAGS)
 
+openssltest: openssl_test.cpp $(COMMON_SRC)
+	$(CXX) $(CXXFLAGS) $(INCLUDES) openssl_test.cpp $(COMMON_SRC) -o test.exe $(LDFLAGS)
+
 # Clean up command (Windows 'del')
 clean:
 	del logappend.exe logread.exe
