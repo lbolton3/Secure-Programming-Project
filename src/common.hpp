@@ -22,5 +22,8 @@ void printArgs(std::map<std::string, std::string> args);
 
 // CRYPTO FUNCTIONS 
 std::string sha256(const std::string s); 
-#endif
 
+// Hashes and compares the passed token to the hashed authentication token
+bool validateToken(const std::string);
+
+#endif

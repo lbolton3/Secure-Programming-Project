@@ -60,6 +60,12 @@ int handleArgs(const std::map<std::string, std::string> &args){
 int main(int argc, char *argv[]){
     auto args = parseArguments(argc, argv);
 
+    // Autheticate Token
+    if (!validateToken(args["-K"])) {
+        std::cout << "Authentication Failed" << std::endl;
+        return -1;
+    }
+
     // Whether we are in batch file mode or not
     if(args.find("-B") == args.end()){
         return handleArgs(args);

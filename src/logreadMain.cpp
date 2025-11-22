@@ -14,6 +14,12 @@ int main(int argc, char* argv[]) {
     //     std::cout << pair.first << ": " << pair.second << std::endl;
     // }
 
+    // Autheticate Token
+    if (!validateToken(args["-K"])) {
+        std::cout << "Authentication Failed" << std::endl;
+        return -1;
+    }
+
     // Determine Operation
     if (args["-S"] != "") {
         printAttendants(args["log"], "employee");
