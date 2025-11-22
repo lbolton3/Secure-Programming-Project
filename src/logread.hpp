@@ -1,7 +1,7 @@
 #ifndef LOGREAD
 #define LOGREAD
 
-#include "common.cpp"
+#include "common.hpp"
 
 // declarations 
 std::vector<std::vector<std::string>> parseLog(const std::string& logFileName);
