@@ -7,6 +7,7 @@
 #include <string> 
 #include <openssl/sha.h> 
 #include <iomanip> 
+#include <set>
 
 // INPUT: Command-line arguments, consiting of flags (starting with '-') and their values, and the log file 
 // OUTPUT: A map of flags to their values, and the log file // - If a flag does not have a value, it is assigned "true"

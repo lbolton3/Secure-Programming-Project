@@ -34,15 +34,15 @@ int logWrite(const std::string logFileName, const std::string targetName, bool i
 }
 
 /*
-COMMENT MAIN OUT TO RUN TESTS (main will eventually go somehwere else, this is just for debugging)
+not needed anymore
 */
 
-int main(){
-    std::cout << "this is logappend" << std::endl;
+// int main(){
+//     std::cout << "this is logappend" << std::endl;
 
-    int i = logWrite("test.txt", "MahaAllouzi", "MikhailNesterenko", 1, false, 123);
+//     int i = logWrite("test.txt", "MahaAllouzi", "MikhailNesterenko", 1, false, 123);
 
-    std::cout << i << std::endl;
+//     std::cout << i << std::endl;
 
-    return 0;
-}
+//     return 0;
+// }
