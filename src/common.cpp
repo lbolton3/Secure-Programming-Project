@@ -79,3 +79,8 @@ void deriveKey(const std::string& token, unsigned char* key, const unsigned char
         key
     );
 }
+
+std::string encryptData(const std::string& plaintext, const unsigned char* key)
+{
+
+}
