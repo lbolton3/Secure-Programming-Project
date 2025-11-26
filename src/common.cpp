@@ -82,5 +82,38 @@ void deriveKey(const std::string& token, unsigned char* key, const unsigned char
 
 std::string encryptData(const std::string& plaintext, const unsigned char* key)
 {
+    EVP_CIPHER_CTX* ctx = EVP_CIPHER_CTX_new();
+    if(!ctx)return "";
 
+    unsigned char iv[12];
+    Rand_bytes(iv, sizeof(iv));
+
+    std::vector<unsigned char> ciphertext(plaintext.size() + EVP_CIPHER_block_size(EVP_aes_256_gcm));
+    int len = 0;
+    int ciphertext_len = 0;
+
+    EVP_EncryptInit_ex(ctx, EVP_aes_256_gcm(), NULL, key, iv);
+
+    EVP_EncryptUpdate(ctx, ciphertext.data(), &len, (const unsigned char*)plaintext.c_str(), plaintext.size());
+    ciphertext_len = len;
+
+    EVP_EncryptFinal_ex(ctx, ciphertext.data() + len, &len);
+    ciphertext_len += len;
+
+    unsigned char tag[16];
+    EVP_CIPHER_CTX_ctrl(ctx, EVP_CTRL_GCM_GET_TAG, 16, tag);
+
+    EVP_CIPHER_CTX_free(ctx);
+
+    std::string result;
+    result.append((char*)iv, 12);
+    result.append((char*)ciphertext.data(), ciphertext_len);
+    result.append((char*)tag, 16);
+    return result;
+}
+
+
+std::string decryptData(const std::string& encrypted, const unsigned char* key)
+{
+    
 }
