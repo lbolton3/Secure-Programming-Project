@@ -115,5 +115,38 @@ std::string encryptData(const std::string& plaintext, const unsigned char* key)
 
 std::string decryptData(const std::string& encrypted, const unsigned char* key)
 {
-    
+    if(encrypted.size() < 28) return "";
+
+    EVP_CIPHER_CTX* ctx = EVP_CIPHER_CTX_new();
+
+    if(!ctx)return "";
+
+    unsigned char iv[12];
+    memcpy(iv, encrypted.data(), 12);
+
+    unsigned char tag[16];
+    memcpy(tag, encrypted.data() + encrypted.size() - 16, 16);
+
+    int ciphertext_len = encrypted.size() - 28;
+    const unsigned char* ciphertext = (const unsigned char*)encrypted.data() + 12;
+
+    std::vector<unsigned char> plaintext(ciphertext_len + EVP_CIPHER_block_size(EVP_aes_256_gcm));
+    int length, plaintext_len = 0;
+
+    EVP_DecryptInit_ex(ctx, EVP_aes_256_gcm(), NULL, key, iv);
+    EVP_DecryptUpdate(ctx, plaintext.data(), &length, ciphertext, ciphertext_len);
+    plaintext_len = length;
+
+    EVP_CIPHER_CTX_ctrl(ctx, EVP_CTRL_GCM_SET_TAG, 16, tag);
+
+    int ret = EVP_DecryptFinal_ex(ctx, plaintext.data() + length, &length);
+
+    EVP_CIPHER_CTX_free(ctx);
+
+    if(ret <=0 ){
+        return "";
+    }
+    plaintext_len += length;
+
+    return std::string((char*)plaintext.data(), plaintext_len);
 }
