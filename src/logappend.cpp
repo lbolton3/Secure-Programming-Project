@@ -34,7 +34,7 @@ int logWrite(const std::string logFileName, const std::string targetName, bool i
 }
 
 /*
-COMMENT MAIN OUT TO RUN TESTS (main will eventually go somehwere else, this is just for debugging)
+not needed anymore
 */
 
 // int main(){

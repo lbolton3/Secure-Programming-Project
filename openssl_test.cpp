@@ -4,6 +4,9 @@
 #include <openssl/evp.h>
 #include <openssl/rand.h>
 
+// g++ -std=c++17 -Ilibs/openssl/include openssl_test.cpp -o openssl_test.exe libs/openssl/lib/VC/x64/MD/libssl.lib libs/openssl/lib/VC/x64/MD/libcrypto.lib -lws2_32 -lgdi32 -lcrypt32
+// .\openssl_test.exe
+
 void sha256_example() {
     std::string input = "hello world";
     unsigned char hash[SHA256_DIGEST_LENGTH];

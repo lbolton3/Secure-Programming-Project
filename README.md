@@ -1,6 +1,6 @@
 # Secure Programming Final Project
 
-### Group: Zach Arnett, Lennice Bolton, Joao Donaton
+### Group 2: Zach Arnett, Lennice Bolton, Joao Donaton
 
 - Specification [logappend](https://course.ece.cmu.edu/~ece732/s24/homework/bibifi/logappend.html)
 - Specification [logread](https://course.ece.cmu.edu/~ece732/s24/homework/bibifi/logread.html)
@@ -19,6 +19,7 @@
 ### MSYS2 
 - Install MSYS2 (https://www.msys2.org/)
 - Open MSYS2 MINGW shell (it's a program called "MSYS2 MINGW64"), HAS TO BE THIS SHELL NOT THE DEFAULT MSYS2 ONE
+- run `pacman -S --needed mingw-w64-x86_64-toolchain`
 - run `pacman -S mingw-w64-x86_64-openssl` to install openssl dependency
 - Now we need to add the MSYS2 mingw shell to vscode
 - Open Vscode, press ctrl+shift+p go to "Preferences: open user settings (JSON)"
@@ -34,7 +35,7 @@
     },
 ```
 - Now you can open the shell inside vscode by doing ctrl+shift+p and "create new terminal (with profile)" and selecting MSYS2
-- Then go to this project's path by doing `cd PATH_TO_ROOT_OF_PROJECT` 
+- Then go to this project's path by doing `cd PATH_TO_ROOT_OF_PROJECT` inside the msys2 shell from vscode. And now you can compile.
 
 - Also, VSCode will show errors in the `#include <>` for openssl stuff, because you need to add the headers to the include path
     - Do this by: ctrl+shift+p, then int "c/c++: edit configurations"
