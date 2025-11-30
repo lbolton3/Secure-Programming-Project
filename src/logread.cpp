@@ -46,7 +46,7 @@ std::vector<std::vector<std::string>> parseLog(const std::string& logFileName, c
         }
     }
     file.close();
-    if(encryptData.empty()){
+    if(encryptedData.empty()){
         return {};
     }
 

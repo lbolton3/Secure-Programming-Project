@@ -42,11 +42,11 @@ int handleArgs(const std::map<std::string, std::string> &args){
 
         string fileName = args.at("log");
         string timestamp = args.at("-T");
+        string token = args.at("-K");
         bool isArrival = args.find("-A") != args.end();
 
         // TODO: handling for when there is no roomId
-        // TODO: logWrite change to accept either guest or employee name 
-        int returnCode = logWrite(fileName, targetName, isEmployee, stoi(roomId), isArrival, stoi(timestamp));
+        int returnCode = logWrite(fileName, targetName, isEmployee, stoi(roomId), isArrival, stoi(timestamp), token);
         
         // error handling
         if(returnCode == 255){

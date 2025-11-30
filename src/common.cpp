@@ -1,5 +1,8 @@
 #include "common.hpp"
 #include <openssl/evp.h>
+#include <openssl/rand.h>
+#include <cstring>
+
 std::map<std::string, std::string> parseArguments(int argc, char* argv[]) {
     std::map<std::string, std::string> arguments;
     
@@ -86,13 +89,15 @@ std::string encryptData(const std::string& plaintext, const unsigned char* key)
     if(!ctx)return "";
 
     unsigned char iv[12];
-    Rand_bytes(iv, sizeof(iv));
+    RAND_bytes(iv, sizeof(iv));
 
-    std::vector<unsigned char> ciphertext(plaintext.size() + EVP_CIPHER_block_size(EVP_aes_256_gcm));
+    std::vector<unsigned char> ciphertext(plaintext.size() + EVP_CIPHER_block_size(EVP_aes_256_gcm()));
+
     int len = 0;
     int ciphertext_len = 0;
 
     EVP_EncryptInit_ex(ctx, EVP_aes_256_gcm(), NULL, key, iv);
+    
 
     EVP_EncryptUpdate(ctx, ciphertext.data(), &len, (const unsigned char*)plaintext.c_str(), plaintext.size());
     ciphertext_len = len;
@@ -118,8 +123,7 @@ std::string decryptData(const std::string& encrypted, const unsigned char* key)
     if(encrypted.size() < 28) return "";
 
     EVP_CIPHER_CTX* ctx = EVP_CIPHER_CTX_new();
-
-    if(!ctx)return "";
+    if(!ctx) return "";
 
     unsigned char iv[12];
     memcpy(iv, encrypted.data(), 12);
@@ -130,23 +134,24 @@ std::string decryptData(const std::string& encrypted, const unsigned char* key)
     int ciphertext_len = encrypted.size() - 28;
     const unsigned char* ciphertext = (const unsigned char*)encrypted.data() + 12;
 
-    std::vector<unsigned char> plaintext(ciphertext_len + EVP_CIPHER_block_size(EVP_aes_256_gcm));
-    int length, plaintext_len = 0;
+    std::vector<unsigned char> plaintext(ciphertext_len + EVP_CIPHER_block_size(EVP_aes_256_gcm()));
+    int len = 0;
+    int plaintext_len = 0;
 
     EVP_DecryptInit_ex(ctx, EVP_aes_256_gcm(), NULL, key, iv);
-    EVP_DecryptUpdate(ctx, plaintext.data(), &length, ciphertext, ciphertext_len);
-    plaintext_len = length;
+    EVP_DecryptUpdate(ctx, plaintext.data(), &len, ciphertext, ciphertext_len);
+    plaintext_len = len;
 
     EVP_CIPHER_CTX_ctrl(ctx, EVP_CTRL_GCM_SET_TAG, 16, tag);
 
-    int ret = EVP_DecryptFinal_ex(ctx, plaintext.data() + length, &length);
+    int ret = EVP_DecryptFinal_ex(ctx, plaintext.data() + len, &len);
 
     EVP_CIPHER_CTX_free(ctx);
 
-    if(ret <=0 ){
+    if(ret <= 0) {
         return "";
     }
-    plaintext_len += length;
+    plaintext_len += len;
 
     return std::string((char*)plaintext.data(), plaintext_len);
 }
