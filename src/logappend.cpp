@@ -1,7 +1,7 @@
 #include "logappend.hpp"
 
 int logWrite(const std::string logFileName, const std::string targetName, bool isEmployee, unsigned int roomId, bool isArrival,
-    unsigned int timestamp){
+    unsigned int timestamp, const std::string& token) {
     /* VALIDATION */
 
     // regex matches any: '..' or '\' or '/' 

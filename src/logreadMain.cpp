@@ -15,18 +15,18 @@ int main(int argc, char* argv[]) {
     // }
 
     // Determine Operation
+    std::string token = args["-K"];
     if (args["-S"] != "") {
-        printAttendants(args["log"], "employee");
-        printAttendants(args["log"], "guest");
-        printOccupiedRooms(args["log"]);
-
+        printAttendants(args["log"], "employee", token);
+        printAttendants(args["log"], "guest", token);
+        printOccupiedRooms(args["log"], token);
     } else if (args["-R"] != "") {
         // Employee Room History
         if (args["-E"] != "") {
-            printRoomHistory(args["log"], args["-E"] != "" ? args["-E"] : args["-G"]);
+            printRoomHistory(args["log"], args["-E"] != "" ? args["-E"] : args["-G"], token);
         // Guest Room History
         } else if (args["-G"] != "") {
-            printRoomHistory(args["log"], args["-G"]);
+            printRoomHistory(args["log"], args["-G"], token);
         }
 
     } else if (args["-T"] != "") {

@@ -11,6 +11,6 @@
 targetName is guest/employee name, and isEmployee identifies if that name belongs to an employee (true) or guest (false)
 */
 int logWrite(const std::string logFileName, const std::string targetName, bool isEmployee,
-     unsigned int roomId, bool isArrival, unsigned int timestamp = 1);
+     unsigned int roomId, bool isArrival, unsigned int timestamp = 1,const std::string& token);
 
 #endif
