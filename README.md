@@ -28,11 +28,7 @@
 ### Example usage
 - <b>IMPORTANT NOTE:</b> in the current version, the token `-K` is just the string `123`
 ```
-# LOGREAD EXAMPLES
-./logread 
-TODO...
-
-# LOGAPPEND EXAMPLES
+# LOGAPPEND EXAMPLES -------------------------------------
 
 # appends that the employee MahaAllouzi arrived at room 7 at timestep 1, to log.txt logfile
 ./logappend.exe -T 1 -K 123 -E MahaAllouzi -A -R 7 log.txt
@@ -42,6 +38,17 @@ TODO...
 
 # reads batchfile.txt line by line
 ./logappend.exe -K 123 -B batchfile.txt
+
+# LOGREAD EXAMPLES ---------------------------------------
+
+# displays the names of all the guests and employees in the log file, followed by what rooms they are currently in
+./logread.exe -K 123 -S log.txt
+
+# displays a list of rooms that the specified guest (MikhailNesterenko) entered
+./logread.exe -K 123 -R -G MikhailNesterenko log.txt
+
+# displays a list of rooms that the specified employee (MahaAllouzi) entered
+./logread.exe -K 123 -R -E MahaAllouzi log.txt
 ```
 
 ### Further documentation
