@@ -96,6 +96,8 @@ void printAttendants(const std::string& logFileName, const std::string& role, co
         }
     }
 
+    std::cout << role << "s in log: ";
+
     for (const auto& attendant : attendants) {
         std::cout << attendant;
         if (attendant != *attendants.rbegin()) {
