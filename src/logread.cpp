@@ -37,15 +37,18 @@ std::vector<std::vector<std::string>> parseLog(const std::string& logFileName, c
     unsigned char key[32];
     deriveKey(token, key, salt);
 
-    //reading unencrypted log data
-    std::string encryptedData;
-    std::string payload;
-    while(std::getline(file, payload)){
-        if(!payload.empty()){
-            encryptedData += payload + "\n";
-        }
-    }
+    // Reading remaining encrypted data as raw bytes
+    file.seekg(0, std::ios::end);
+    size_t fileSize = file.tellg();
+    file.seekg(16);  
+    
+    size_t encryptedSize = fileSize - 16;
+    std::vector<char> encryptedBytes(encryptedSize);
+    file.read(encryptedBytes.data(), encryptedSize);
     file.close();
+    
+    std::string encryptedData(encryptedBytes.begin(), encryptedBytes.end());
+    
     if(encryptedData.empty()){
         return {};
     }
@@ -77,7 +80,6 @@ std::vector<std::vector<std::string>> parseLog(const std::string& logFileName, c
         }
     }
 
-    file.close();
     return logEntries;
 }
 

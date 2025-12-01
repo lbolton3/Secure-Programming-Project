@@ -1,9 +1,11 @@
 #include "logappend.hpp"
+#include <openssl/rand.h>
 
 int logWrite(const std::string logFileName, const std::string targetName, bool isEmployee, unsigned int roomId, bool isArrival,
     unsigned int timestamp, const std::string& token) {
-    /* VALIDATION */
 
+    /* VALIDATION */
+    
     // regex matches any: '..' or '\' or '/' 
     // prevent file directory traversal
     std::regex invalidFileNameParts(R"(\.\.|\\|^\/)"); 
@@ -23,26 +25,47 @@ int logWrite(const std::string logFileName, const std::string targetName, bool i
         return 255;
     }
 
-    std::ofstream f(logFileName, std::ios::app);
+    // validate token is not empty
+    if(token.empty()){
+        return 255;
+    }
 
-    f << "[" << timestamp << "] room \"" << roomId << "\": " << ( isEmployee ? "employee " : "guest ") << "\"" << targetName << "\" " << 
-        (isArrival ? "arrived" : "departed") << "\n";
+    /* ENCRYPTION LOGIC */
 
-    f.close();
+    bool fileExists = std::ifstream(logFileName).good();
+    unsigned char salt[16];
+    unsigned char key[32];
+    
+    if(!fileExists){
+        RAND_bytes(salt, 16);
+        std::ofstream outFile(logFileName, std::ios::binary);
+        outFile.write((char*)salt, 16);
+        outFile.close();
+    } else {
+        std::ifstream inFile(logFileName, std::ios::binary);
+        inFile.read((char*)salt, 16);
+        if(inFile.gcount() != 16){
+            std::cerr << "integrity violation" << std::endl;
+            return 255;
+        }
+        inFile.close();
+    }
+    
+    deriveKey(token, key, salt);
 
-    return 0; 
+    // Creating the log entry
+    std::string entry = "[" + std::to_string(timestamp) + "] room \"" + 
+                        std::to_string(roomId) + "\": " +
+                        (isEmployee ? "employee" : "guest") + " \"" + 
+                        targetName + "\" " + 
+                        (isArrival ? "arrived" : "departed") + "\n";
+
+    std::string encryptedEntry = encryptData(entry, key);
+    
+    
+    std::ofstream outFile(logFileName, std::ios::binary | std::ios::app);
+    outFile.write(encryptedEntry.data(), encryptedEntry.size());
+    outFile.close();
+    
+    return 0;
 }
-
-/*
-not needed anymore
-*/
-
-// int main(){
-//     std::cout << "this is logappend" << std::endl;
-
-//     int i = logWrite("test.txt", "MahaAllouzi", "MikhailNesterenko", 1, false, 123);
-
-//     std::cout << i << std::endl;
-
-//     return 0;
-// }
