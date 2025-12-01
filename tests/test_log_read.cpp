@@ -7,10 +7,9 @@
 
 using namespace std;
 
-const std::string AUTH_TOKEN = "123"; // for now just hardcoded to the correct token 
 
 // ---- HELPER FUNCTIONS ----
-void generateSampleLogFile(const std::string& logFileName) {
+void generateSampleLogFile(const std::string& logFileName, const std::string& AUTH_TOKEN) {
     // //Create Log File
 
     logWrite(logFileName, "Alice", true, 101, true, 1001, AUTH_TOKEN);
@@ -60,10 +59,21 @@ std::string captureOutput(std::function<void()> func) {
 // ---- TEST FUNCTIONS ----
 
 // for now this only generates a log for us to manually test on
-int main(){
+int main(int argc, char* argv[]){
+    if (argc < 2) {
+        cout << "testlogread requires the security token. Usage: \"make testlogread TOKEN=?\" replace ? with the token." << endl;
+        return 1;
+    }
+
+    std::string token = argv[1];
+    if(!validateToken(token)){
+        cout << "invalid token." << endl;
+        return 1;
+    }
+
     cout << "----- TESTS FOR LOG READ -----" << endl << endl;
 
-    generateSampleLogFile("logfile");
+    generateSampleLogFile("logfile", token);
 
     cout << endl <<"----- All tests for log read passed -----" << endl;
     return 0;

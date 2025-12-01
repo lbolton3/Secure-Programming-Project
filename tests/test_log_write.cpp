@@ -6,9 +6,7 @@
 
 using namespace std;
 
-const std::string AUTH_TOKEN = "123"; // for now just hardcoded to the correct token 
-
-void testInputValidation(){
+void testInputValidation(const string& AUTH_TOKEN){
     cout << "Testing path traversal attacks..." << endl;
     string payload = "";
 
@@ -85,9 +83,14 @@ void testInputValidation(){
     assert(255 == logWrite("file.txt", payload, true, 1, true, payloadTimestamp, AUTH_TOKEN));
 }
 
-int main(){
+int main(int argc, char* argv[]){
+
+    // token does not actually matter for these append test cases, they only test functionality of log writing functions.
+    // the logwriting function itself will derive the crypto key from the token regardless of what it is, and it wont matter because it's not reused later.
+    std::string token = "WHATEVER102030";
+
     cout << "----- TESTS FOR LOG WRITE FUNCTION -----" << endl << endl;
 
     cout << "[!] Testing Input Validation" << endl; 
-    testInputValidation();
+    testInputValidation(token);
 }
