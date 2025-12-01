@@ -30,10 +30,10 @@ int handleArgs(const std::map<std::string, std::string> &args){
             return 255;
         }
 
-        // roomId is optional
-        string roomId = "";
+        // roomId is optional (default to 0 for gallery itself)
+        unsigned int roomId = 0;
         if(args.find("-R") != args.end()){
-            roomId = args.at("-R");
+            roomId = stoi(args.at("-R"));
         }
 
         // targetName is the name of guest/employee
@@ -42,11 +42,10 @@ int handleArgs(const std::map<std::string, std::string> &args){
 
         string fileName = args.at("log");
         string timestamp = args.at("-T");
+        string token = args.at("-K");
         bool isArrival = args.find("-A") != args.end();
 
-        // TODO: handling for when there is no roomId
-        // TODO: logWrite change to accept either guest or employee name 
-        int returnCode = logWrite(fileName, targetName, isEmployee, stoi(roomId), isArrival, stoi(timestamp));
+        int returnCode = logWrite(fileName, targetName, isEmployee, roomId, isArrival, stoi(timestamp), token);
         
         // error handling
         if(returnCode == 255){
