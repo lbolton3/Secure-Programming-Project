@@ -8,15 +8,6 @@ using namespace std;
 
 const std::string AUTH_TOKEN = "123"; // for now just hardcoded to the correct token 
 
-/**
- * For now just compile and run manually:
- *  - g++ test_log_write.cpp ../src/logappend.cpp -o test_log_write
- *  - test_log_write.exe
- * 
- * Later we can make a python or batch script to auto run all the tests
- * We also need to cleanup after it, since it produces .exe and .txt files
- */
-
 void testInputValidation(){
     cout << "Testing path traversal attacks..." << endl;
     string payload = "";

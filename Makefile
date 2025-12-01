@@ -55,7 +55,7 @@ testlogappend: $(TEST_DIR)/test_log_write.cpp $(SRC_DIR)/logappend.cpp $(COMMON_
 logread: $(SRC_DIR)/logreadMain.cpp $(SRC_DIR)/logread.cpp $(COMMON_SRC)
 	$(CXX) $(CXXFLAGS) $(INCLUDES) $^ -o logread.exe $(LDFLAGS)
 
-testlogread: $(TEST_DIR)/test_log_read.cpp $(SRC_DIR)/logread.cpp $(COMMON_SRC)
+testlogread: $(TEST_DIR)/test_log_read.cpp $(SRC_DIR)/logread.cpp $(SRC_DIR)/logappend.cpp $(COMMON_SRC)
 	$(CXX) $(CXXFLAGS) $(INCLUDES) $^ -o test_log_read.exe $(LDFLAGS)
 	./test_log_read.exe
 

@@ -25,6 +25,12 @@
 - Input validation is done via Regex to match patterns that correspond to specific kinds of attacks or invalid inputs 
     - These are documented and verified in the test files under `tests/`
 
+#### Encryption
+- We use OpenSSL's AES implementation to encrypt and decrypt the logfile. 
+- The logfile is stored as an encrypted file on disk and cannot be modified or read without the appropriate token `-K`
+- The AES symmetric key is derived from the correct token `-K` after authentication passes
+    - Therefore, there is no need to store the AES key anywhere.
+
 ### Example usage
 - <b>IMPORTANT NOTE:</b> in the current version, the token `-K` is just the string `123`
 ```
