@@ -45,6 +45,8 @@ void generateSampleLogFile(const string& logFileName, const string& AUTH_TOKEN) 
     logWrite(logFileName, "Karen", true, 404, true, 1028, AUTH_TOKEN);
     logWrite(logFileName, "Hank", false, 808, false, 1029, AUTH_TOKEN);
     logWrite(logFileName, "Jack", false, 505, false, 1030, AUTH_TOKEN);
+    logWrite(logFileName, "Charlie", true, 909, false, 1031, AUTH_TOKEN);
+    logWrite(logFileName, "Charlie", true, 404, true, 1032, AUTH_TOKEN);
 
     cout << "Log file '" << logFileName << "' generated successfully." << endl << endl;
 }

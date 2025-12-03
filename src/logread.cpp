@@ -170,7 +170,7 @@ void printRoomHistory(const std::string& logFileName, const std::string& attenda
 
     for (const auto& roomID : roomHistory) {
         std::cout << roomID;
-        if (roomID != roomHistory.back()) {
+        if (&roomID != &roomHistory.back()) {
             std::cout << ", ";
         }
     }
