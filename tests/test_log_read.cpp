@@ -9,8 +9,11 @@ using namespace std;
 
 
 // ---- HELPER FUNCTIONS ----
-void generateSampleLogFile(const std::string& logFileName, const std::string& AUTH_TOKEN) {
+void generateSampleLogFile(const string& logFileName, const string& AUTH_TOKEN) {
     // //Create Log File
+
+    // Remove existing log file if it exists
+    remove(logFileName.c_str()); 
 
     logWrite(logFileName, "Alice", true, 101, true, 1001, AUTH_TOKEN);
     logWrite(logFileName, "Bob", false, 212, true, 1002, AUTH_TOKEN);
@@ -43,16 +46,16 @@ void generateSampleLogFile(const std::string& logFileName, const std::string& AU
     logWrite(logFileName, "Hank", false, 808, false, 1029, AUTH_TOKEN);
     logWrite(logFileName, "Jack", false, 505, false, 1030, AUTH_TOKEN);
 
-    std::cout << "Log file '" << logFileName << "' generated successfully." << std::endl;
+    cout << "Log file '" << logFileName << "' generated successfully." << endl << endl;
 }
 
-std::string captureOutput(std::function<void()> func) {
-    std::stringstream buffer;
-    std::streambuf* old = std::cout.rdbuf(buffer.rdbuf());
+string captureOutput(function<void()> func) {
+    stringstream buffer;
+    streambuf* old = cout.rdbuf(buffer.rdbuf());
 
     func();
 
-    std::cout.rdbuf(old);
+    cout.rdbuf(old);
     return buffer.str();
 }
 
@@ -65,15 +68,31 @@ int main(int argc, char* argv[]){
         return 1;
     }
 
-    std::string token = argv[1];
+    string token = argv[1];
     if(!validateToken(token)){
         cout << "invalid token." << endl;
         return 1;
     }
 
-    cout << "----- TESTS FOR LOG READ -----" << endl << endl;
+    cout << endl << "----- TESTS FOR LOG READ -----" << endl << endl;
 
-    generateSampleLogFile("logfile", token);
+    // Generate Sample Log File
+    generateSampleLogFile("logfile.txt", token);
+
+    // Traversal Attack Test
+    string invalidLogFileName = "../logfile.txt";
+    cout << "Testing payload \"" << invalidLogFileName << "\"" << endl; 
+    auto output = captureOutput([&]() {
+        parseLog(invalidLogFileName, token);
+    });
+    assert(output.find("invalid") != string::npos);
+    
+    invalidLogFileName = "C:\\logfile.txt";
+    cout << "Testing payload \"" << invalidLogFileName << "\"" << endl; 
+    output = captureOutput([&]() {
+        parseLog(invalidLogFileName, token);
+    });
+    assert(output.find("invalid") != string::npos);
 
     cout << endl <<"----- All tests for log read passed -----" << endl;
     return 0;

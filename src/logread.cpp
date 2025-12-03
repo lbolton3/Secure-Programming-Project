@@ -18,6 +18,13 @@
 // OUTPUT: vector of vectors containing log entries
 //        each entry is a vector of strings: [roomID, role, name, action]
 std::vector<std::vector<std::string>> parseLog(const std::string& logFileName, const std::string& token) {
+    // Check for traversal attack in log file name ".."
+    if (logFileName.find("..") != std::string::npos || logFileName.find('\\') != std::string::npos) {
+        std::cout << "invalid" << std::endl;
+        return {};
+    }
+
+    
     std::ifstream file(logFileName, std::ios::binary);
     if (!file.is_open()) {
         return {};
@@ -49,7 +56,7 @@ std::vector<std::vector<std::string>> parseLog(const std::string& logFileName, c
         file.read(encryptedBytes.data(), entrySize);
     
         if (file.gcount() != entrySize) {
-            std::cerr << "Integrity violation: Log entry incomplete." << std::endl;
+            std::cout << "invalid" << std::endl;
             return {};
         }
 
@@ -57,7 +64,7 @@ std::vector<std::vector<std::string>> parseLog(const std::string& logFileName, c
         std::string decryptedData = decryptData(encryptedString, key);
         
         if(decryptedData.empty()){
-            std::cerr << "Integrity violation: Decryption failed." << std::endl;
+            std::cout << "invalid" << std::endl;
             return {};
         }
 
