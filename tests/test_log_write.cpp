@@ -6,89 +6,91 @@
 
 using namespace std;
 
-/**
- * For now just compile and run manually:
- *  - g++ test_log_write.cpp ../src/logappend.cpp -o test_log_write
- *  - test_log_write.exe
- * 
- * Later we can make a python or batch script to auto run all the tests
- * We also need to cleanup after it, since it produces .exe and .txt files
- */
-
-void testInputValidation(){
+void testInputValidation(const string& AUTH_TOKEN){
     cout << "Testing path traversal attacks..." << endl;
     string payload = "";
 
     // path traversal attacks
     payload = "../../../etc/passwd";
     cout << "Testing payload \"" << payload << "\"" << endl; 
-    assert(255 == logWrite(payload, "dummyName", false, 1, true, 1));
+    assert(255 == logWrite(payload, "dummyName", false, 1, true, 1, AUTH_TOKEN));
     
     payload = "./../../../etc/passwd";
     cout << "Testing payload \"" << payload << "\"" << endl; 
-    assert(255 == logWrite(payload, "dummyName", false, 1, true, 1));
+    assert(255 == logWrite(payload, "dummyName", false, 1, true, 1, AUTH_TOKEN));
 
     payload = "/etc/passwd";
     cout << "Testing payload \"" << payload << "\"" << endl; 
-    assert(255 == logWrite(payload, "dummyName", false, 1, true, 1));
+    assert(255 == logWrite(payload, "dummyName", false, 1, true, 1, AUTH_TOKEN));
 
     payload = "directory/../secretfiles/myfile.txt";
     cout << "Testing payload \"" << payload << "\"" << endl; 
-    assert(255 == logWrite(payload, "dummyName", false, 1, true, 1));
+    assert(255 == logWrite(payload, "dummyName", false, 1, true, 1, AUTH_TOKEN));
 
     payload = "./directory/../secretfiles/myfile.txt";
     cout << "Testing payload \"" << payload << "\"" << endl; 
-    assert(255 == logWrite(payload, "dummyName", false, 1, true, 1));
+    assert(255 == logWrite(payload, "dummyName", false, 1, true, 1, AUTH_TOKEN));
+    
+    // Should fail for subdirectory
+    payload = "./directory/file.txt";
+    cout << "Testing payload \"" << payload << "\"" << endl; 
+    assert(255 == logWrite(payload, "dummyName", false, 1, true, 1, AUTH_TOKEN));
+    
+    // should be secure against windows specific paths traversal too
+    payload = "E:\\backup.zip";
+    cout << "Testing payload \"" << payload << "\"" << endl; 
+    assert(255 == logWrite(payload, "dummyName", false, 1, true, 1, AUTH_TOKEN));
 
     cout << endl; 
     cout << "Testing non-malicious file paths..." << endl;
 
     payload = "file.txt";
     cout << "Testing payload \"" << payload << "\"" << endl; 
-    assert(0 == logWrite(payload, "dummyName", false, 1, true, 1));
+    assert(0 == logWrite(payload, "dummyName", false, 1, true, 1, AUTH_TOKEN));
 
     payload = "./file.txt";
     cout << "Testing payload \"" << payload << "\"" << endl; 
-    assert(0 == logWrite(payload, "dummyName", false, 1, true, 1));
-
-    payload = "./directory/file.txt";
-    cout << "Testing payload \"" << payload << "\"" << endl; 
-    assert(0 == logWrite(payload, "dummyName", false, 1, true, 1));
+    assert(0 == logWrite(payload, "dummyName", false, 1, true, 1, AUTH_TOKEN));
 
     cout << endl; 
     cout << "Testing invalid timestamp..." << endl;
 
     int payloadTimestamp = 0;
     cout << "Testing payload \"" << payloadTimestamp << "\"" << endl; 
-    assert(255 == logWrite("file.txt", "dummyName", true, 1, true, payloadTimestamp));
+    assert(255 == logWrite("file.txt", "dummyName", true, 1, true, payloadTimestamp, AUTH_TOKEN));
 
     cout << endl; 
     cout << "Testing invalid guest and employee names..." << endl;
 
     payload = "Mikhail Nesterenko";
     cout << "Testing payload \"" << payload << "\"" << endl; 
-    assert(255 == logWrite("file.txt", payload, true, 1, true, payloadTimestamp));
+    assert(255 == logWrite("file.txt", payload, true, 1, true, payloadTimestamp, AUTH_TOKEN));
 
     payload = "Mikhail Nesterenko";
     cout << "Testing payload \"" << payload << "\"" << endl; 
-    assert(255 == logWrite("file.txt", payload, true, 1, true, payloadTimestamp));
+    assert(255 == logWrite("file.txt", payload, true, 1, true, payloadTimestamp, AUTH_TOKEN));
     
     payload = "Maha7";
     cout << "Testing payload \"" << payload << "\"" << endl; 
-    assert(255 == logWrite("file.txt", payload, true, 1, true, payloadTimestamp));
+    assert(255 == logWrite("file.txt", payload, true, 1, true, payloadTimestamp, AUTH_TOKEN));
 
     payload = "J0ao";
     cout << "Testing payload \"" << payload << "\"" << endl; 
-    assert(255 == logWrite("file.txt", payload, true, 1, true, payloadTimestamp));
+    assert(255 == logWrite("file.txt", payload, true, 1, true, payloadTimestamp, AUTH_TOKEN));
 
     payload = "Joao$";
     cout << "Testing payload \"" << payload << "\"" << endl; 
-    assert(255 == logWrite("file.txt", payload, true, 1, true, payloadTimestamp));
+    assert(255 == logWrite("file.txt", payload, true, 1, true, payloadTimestamp, AUTH_TOKEN));
 }
 
-int main(){
+int main(int argc, char* argv[]){
+
+    // token does not actually matter for these append test cases, they only test functionality of log writing functions.
+    // the logwriting function itself will derive the crypto key from the token regardless of what it is, and it wont matter because it's not reused later.
+    std::string token = "WHATEVER102030";
+
     cout << "----- TESTS FOR LOG WRITE FUNCTION -----" << endl << endl;
 
     cout << "[!] Testing Input Validation" << endl; 
-    testInputValidation();
+    testInputValidation(token);
 }

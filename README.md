@@ -5,6 +5,9 @@
 - Specification for [logappend](https://course.ece.cmu.edu/~ece732/s24/homework/bibifi/logappend.html)
 - Specification for [logread](https://course.ece.cmu.edu/~ece732/s24/homework/bibifi/logread.html)
 
+- <b>IMPORTANT NOTE:</b> in the current version, the token `-K` is just the string `123`
+    - Use this for running `logappend` `logread` as well as the tests, as explained in the Build and Run section
+
 ### Build and Run 
 - Compiling and running running requires:
     - Windows OS
@@ -14,7 +17,9 @@
     - run `make logappend` and `make logread`
     - These commands will generate executable files for each program and place them in the project's root `/`
 - Running tests
-    - run `make testlogappend` and `make testlogread`
+    - run `make testlogappend` to make testlogappend
+    - run `make testlogread TOKEN=?` where ? is the authentication token whose hash is in `/token.txt`
+        - The token is used for the testlogread because it generates a dummy log full of sample data for tests to be manually run on. Therefore, the token needs to match the real one so we can decrypt it later.
     - These will automatically build and run the unit tests
 
 
@@ -25,8 +30,14 @@
 - Input validation is done via Regex to match patterns that correspond to specific kinds of attacks or invalid inputs 
     - These are documented and verified in the test files under `tests/`
 
+#### Encryption
+- We use OpenSSL's AES implementation to encrypt and decrypt the logfile. 
+- The logfile is stored as an encrypted file on disk and cannot be modified or read without the appropriate token `-K`
+- The AES symmetric key is derived from the correct token `-K` after authentication passes
+    - Therefore, there is no need to store the AES key anywhere.
+- The test `make testlogread` generates an encrypted file called "logfile" that has a bunch of dummy data to test with.
+
 ### Example usage
-- <b>IMPORTANT NOTE:</b> in the current version, the token `-K` is just the string `123`
 ```
 # LOGAPPEND EXAMPLES -------------------------------------
 

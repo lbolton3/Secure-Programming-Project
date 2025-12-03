@@ -8,6 +8,7 @@
 #include <openssl/sha.h> 
 #include <iomanip> 
 #include <set>
+#include <vector>
 
 // INPUT: Command-line arguments, consiting of flags (starting with '-') and their values, and the log file 
 // OUTPUT: A map of flags to their values, and the log file // - If a flag does not have a value, it is assigned "true"
@@ -26,4 +27,7 @@ std::string sha256(const std::string s);
 // Hashes and compares the passed token to the hashed authentication token
 bool validateToken(const std::string);
 
+void deriveKey(const std::string& token, unsigned char* key, const unsigned char* salt);
+std::string encryptData(const std::string& plaintext, const unsigned char* key);
+std::string decryptData(const std::string& encrypted, const unsigned char* key);
 #endif
