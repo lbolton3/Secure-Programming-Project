@@ -79,10 +79,17 @@ int main(int argc, char* argv[]){
     // Generate Sample Log File
     generateSampleLogFile("logfile.txt", token);
 
+    // Test Proper Log Parsing
+    cout << "Testing proper log parsing" << endl;
+    auto output = captureOutput([&]() {
+        parseLog("logfile.txt", token);
+    });
+    assert(output.find("invalid") == string::npos);
+
     // Traversal Attack Test
     string invalidLogFileName = "../logfile.txt";
     cout << "Testing payload \"" << invalidLogFileName << "\"" << endl; 
-    auto output = captureOutput([&]() {
+    output = captureOutput([&]() {
         parseLog(invalidLogFileName, token);
     });
     assert(output.find("invalid") != string::npos);
@@ -94,6 +101,14 @@ int main(int argc, char* argv[]){
     });
     assert(output.find("invalid") != string::npos);
 
-    cout << endl <<"----- All tests for log read passed -----" << endl;
+    // Test invalid token
+    string invalidToken = "wrongtoken";
+    cout << "Testing invalid token \"" << invalidToken << "\"" << endl;
+    output = captureOutput([&]() {
+        parseLog("logfile.txt", invalidToken);
+    });
+    assert(output.find("invalid") != string::npos);
+
+    cout << endl <<"----- All tests for log read passed -----" << endl << endl;
     return 0;
 }
